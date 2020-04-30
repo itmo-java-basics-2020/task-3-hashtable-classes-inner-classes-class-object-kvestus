@@ -34,7 +34,7 @@ public class HashTable {
         this.deletedElements = new boolean[capacity];
         this.capacity = capacity;
         this.loadFactor = loadFactor;
-        this.threshold = (int) Math.floor(capacity * loadFactor);
+        this.threshold = (int)(capacity * loadFactor);
     }
 
     public Object put(Object key, Object value) {

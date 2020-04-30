@@ -38,87 +38,87 @@ public class HashTable {
     }
 
     public Object put(Object key, Object value) {
-        if (this.size == MAX_SIZE) {
+        if (size == MAX_SIZE) {
             throw new RuntimeException("You cannot put more object");
         }
 
         Entry newElement = new Entry(key, value);
-        int foundIndex = this.getIndexByKey(key);
+        int foundIndex = getIndexByKey(key);
 
-        if (this.elements[foundIndex] == null) {
+        if (elements[foundIndex] == null) {
 
-            foundIndex = this.getHash(key);
-            while (this.elements[foundIndex] != null) {
-                foundIndex = (foundIndex + PROBING_INTERVAL) % this.capacity;
+            foundIndex = getHash(key);
+            while (elements[foundIndex] != null) {
+                foundIndex = (foundIndex + PROBING_INTERVAL) % capacity;
             }
 
             deletedElements[foundIndex] = false;
 
-            this.elements[foundIndex] = newElement;
-            ++this.size;
+            elements[foundIndex] = newElement;
+            ++size;
 
-            if (this.size >= this.threshold) {
-                this.resize();
+            if (size >= threshold) {
+                resize();
             }
 
             return null;
         }
-        Object oldValue = this.elements[foundIndex].value;
-        this.elements[foundIndex] = newElement;
+        Object oldValue = elements[foundIndex].value;
+        elements[foundIndex] = newElement;
         return oldValue;
     }
 
     public Object get(Object key) {
-        Entry foundEntry = this.elements[this.getIndexByKey(key)];
+        Entry foundEntry = elements[getIndexByKey(key)];
         return (foundEntry == null) ? null : foundEntry.value;
     }
 
     public Object remove(Object key) {
-        int foundIndex = this.getIndexByKey(key);
+        int foundIndex = getIndexByKey(key);
 
-        if (this.elements[foundIndex] == null) {
+        if (elements[foundIndex] == null) {
             return null;
         }
 
-        this.deletedElements[foundIndex] = true;
-        Object oldValue = this.elements[foundIndex].value;
-        --this.size;
-        this.elements[foundIndex] = null;
+        deletedElements[foundIndex] = true;
+        Object oldValue = elements[foundIndex].value;
+        --size;
+        elements[foundIndex] = null;
         return oldValue;
     }
 
     public int size() {
-        return this.size;
+        return size;
     }
 
     private void resize() {
-        if (this.size >= this.threshold) {
-            this.capacity *= RESIZE_FACTOR;
-            this.threshold = (int) (this.capacity * this.loadFactor);
+        if (size >= threshold) {
+            capacity *= RESIZE_FACTOR;
+            threshold = (int) (capacity * loadFactor);
 
-            Entry[] oldElements = this.elements;
-            this.elements = new Entry[this.capacity];
-            this.deletedElements = new boolean[this.capacity];
-            this.size = 0;
+            Entry[] oldElements = elements;
+            elements = new Entry[capacity];
+            deletedElements = new boolean[capacity];
+            size = 0;
             for (Entry currentElement : oldElements) {
                 if (currentElement != null) {
-                    this.put(currentElement.key, currentElement.value);
+                    put(currentElement.key, currentElement.value);
                 }
             }
         }
     }
 
     private int getHash(Object key) {
-        return Math.abs(key.hashCode()) % this.capacity;
+        return Math.abs(key.hashCode()) % capacity;
     }
 
     private int getIndexByKey(Object key) {
-        int hashKey = this.getHash(key);
+        int hashKey = getHash(key);
         while (deletedElements[hashKey]
-                || (this.elements[hashKey] != null
-                && !this.elements[hashKey].key.equals(key))
+                || (elements[hashKey] != null
+                && !elements[hashKey].key.equals(key))
         ) {
-            hashKey = (hashKey + PROBING_INTERVAL) % this.capacity;
+            hashKey = (hashKey + PROBING_INTERVAL) % capacity;
         }
         return hashKey;
     }
@@ -134,11 +134,11 @@ public class HashTable {
         }
 
         public Object getKey() {
-            return this.key;
+            return key;
         }
 
         public Object getValue() {
-            return this.value;
+            return value;
         }
 
         @Override

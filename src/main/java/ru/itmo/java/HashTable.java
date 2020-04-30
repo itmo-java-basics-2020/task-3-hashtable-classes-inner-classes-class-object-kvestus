@@ -3,8 +3,6 @@ package ru.itmo.java;
 import java.util.Map;
 import java.util.Arrays;
 
-import static java.util.Optional.ofNullable;
-
 public class HashTable {
 
     private final static int RESIZE_FACTOR = 2;
@@ -71,7 +69,8 @@ public class HashTable {
     }
 
     public Object get(Object key) {
-        return ofNullable(elements[getIndexByKey(key)]);
+        Entry foundEntry = elements[getIndexByKey(key)];
+        return (foundEntry == null) ? null : foundEntry.value;
     }
 
     public Object remove(Object key) {

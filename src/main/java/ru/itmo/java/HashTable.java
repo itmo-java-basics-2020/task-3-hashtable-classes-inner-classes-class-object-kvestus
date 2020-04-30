@@ -63,14 +63,14 @@ public class HashTable {
 
             return null;
         }
-        Object oldValue = elements[foundIndex].value;
+        Object oldValue = elements[foundIndex].getValue();
         elements[foundIndex] = newElement;
         return oldValue;
     }
 
     public Object get(Object key) {
         Entry foundEntry = elements[getIndexByKey(key)];
-        return (foundEntry == null) ? null : foundEntry.value;
+        return (foundEntry == null) ? null : foundEntry.getValue();
     }
 
     public Object remove(Object key) {
@@ -81,7 +81,7 @@ public class HashTable {
         }
 
         deletedElements[foundIndex] = true;
-        Object oldValue = elements[foundIndex].value;
+        Object oldValue = elements[foundIndex].getValue();
         --size;
         elements[foundIndex] = null;
         return oldValue;
@@ -102,7 +102,7 @@ public class HashTable {
             size = 0;
             for (Entry currentElement : oldElements) {
                 if (currentElement != null) {
-                    put(currentElement.key, currentElement.value);
+                    put(currentElement.getKey(), currentElement.getValue());
                 }
             }
         }
